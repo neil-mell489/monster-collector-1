@@ -1,0 +1,19 @@
+{% extends 'monsters/base.html' %}
+
+{% block content %}
+    <h1>Monster List</h1>
+
+    {% for monster in monsters %}
+        <div class="card">
+            <a href="{% url 'detail' monster.pk %}">
+                <div class="card-content">
+                    <span class="card-title">{{ monster.name }}</span>
+                    <p>Level: {{ monster.level }}</p>
+                    <p>Attribute: {{ monster.attribute }}</p>
+                    <p>Type: {{ monster.type }}</p>
+                    <p>Lore: {{ monster.lore|linebreaks }}</p>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+{% endblock %}
