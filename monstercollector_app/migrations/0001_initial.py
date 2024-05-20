@@ -16,10 +16,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('level', models.IntegerField(max_length=100)),
+                ('level', models.IntegerField()),
                 ('attribute', models.CharField(max_length=100)),
                 ('type', models.CharField(max_length=100)),
-                ('lore', models.TextField(max_length=400)),
+                ('lore', models.TextField(max_length=250)),
             ],
         ),
     ]

@@ -47,3 +47,4 @@ def index(request):
 def monster_detail_view(request, pk):
     monster = Monster.objects.get(pk=pk)
     return render(request, 'monsters/detail.html', {'monster': monster})
+
