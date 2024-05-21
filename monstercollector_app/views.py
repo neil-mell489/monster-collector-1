@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Monster
-
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 monsters = [
     {
@@ -38,7 +38,7 @@ def home(request):
 def about(request):
     return render(request, 'monsters/about.html')
 
-def index(request):
+def monsters_index(request):
     monsters = Monster.objects.all()
     return render(request, 'monsters/index.html', {
         'monsters': monsters
@@ -48,3 +48,15 @@ def monster_detail(request, monster_id):
     monster = Monster.objects.get(id=monster_id)
     return render(request, 'monsters/detail.html', {'monster': monster})
 
+class MonsterCreate(CreateView):
+  model = Monster
+  fields = ['name', 'level', 'attribute', 'type', 'lore']
+
+
+class MonsterUpdate(UpdateView):
+  model = Monster
+  fields = ['level', 'attribute', 'type', 'lore']
+
+class MonsterDelete(DeleteView):
+  model = Monster
+  success_url = '/monsters/'

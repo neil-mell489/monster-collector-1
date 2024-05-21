@@ -3,14 +3,101 @@
 
 <h1>Monster Details</h1>
 
-<div class="card">
+<div class="row">
+  <div class="col s6">
+    <div class="card">
       <div class="card-content">
         <span class="card-title">{{ monster.name }}</span>
         <p>Level: {{ monster.level }}</p>
         <p>Attribute: {{ monster.attribute }}</p>
         <p>Type: {{ monster.type }}</p>
         <p>Lore: {{ monster.lore|linebreaks }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'monsters_update' monster.id %}">Edit</a>
+        <a href="{% url 'monsters_delete' monster.id %}">Delete</a>
+      </div>
+    </div>
+    {% for photo in monster.photo_set.all %}
+      <img class="responsive-img card-panel" src="{{photo.url}}" alt="Monster Photo">
+    {% empty %}
+      <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+    {% endfor %}
+    <form action="{% url 'add_photo' monster.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+      {% csrf_token %}
+      <input type="file" name="photo-file">
+      <br><br>
+      <button type="submit" class="btn">Upload Photo</button>
+    </form>
+  </div>
+  <div class="col s6">
+    <form action="{% url 'add_battle' monster.id %}" method="POST">
+      {% csrf_token %}
+      <!-- Render the inputs -->
+      {{ battle_form.as_p }}
+      <input type="submit" class="btn" value="Add Battle">
+    </form>
+    <table class="striped">
+      <thead>
+        <tr><th>Date</th><th>Duel</th></tr>
+      </thead>
+      <tbody>
+        {% for battle in monster.battle_set.all %}
+          <tr>
+            <td>{{battle.date}}</td>
+            <td>{{battle.get_duel_display}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
-
+<hr>
+<div class="row">
+  <div class="col s6">
+    <h3>{{ monster.name }}'s Powerups</h3>
+    {% if monster.powerups.count %}
+      {% for powerup in monster.powerups.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A <span style="color: {{ powerup.color }}">{{ powerup.color }}</span> {{ powerup.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_delete' monster.id powerup.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn red">Remove</button>
+            </form>
+          </div>        
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>No Powerups!</h5>
+    {% endif %}
+  </div>
+  <!-- Available powerups will come after this line -->
+  <div class="col s6">
+    <h3>Available Powerups</h3>
+    {% if powerups.count %}
+      {% for powerup in powerups.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A <span style="color: {{ powerup.color }}">{{ powerup.color }}</span> {{ powerup.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_powerup' monster.id powerup.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{monster.name}} Already Has All Powerups Available</h5>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

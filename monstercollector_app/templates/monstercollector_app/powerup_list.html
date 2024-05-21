@@ -1,0 +1,17 @@
+{% extends 'monsters/base.html' %}
+{% block content %}
+
+<h1>Toy List</h1>
+
+{% for powerup in powerup_list %}
+  <a href="{% url 'powerups_detail' powerup.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ powerup.name }}</span>
+            <p>Color: {{ powerup.color }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}
