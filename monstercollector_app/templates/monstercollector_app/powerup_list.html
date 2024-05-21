@@ -1,7 +1,7 @@
 {% extends 'monsters/base.html' %}
 {% block content %}
 
-<h1>Toy List</h1>
+<h1>Power-Up List!</h1>
 
 {% for powerup in powerup_list %}
   <a href="{% url 'powerups_detail' powerup.id %}">
